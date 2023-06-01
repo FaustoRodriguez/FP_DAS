@@ -20,7 +20,9 @@ Instead of using one function to look for both tweets and comments we invert the
  
  3 design patterns:
  Abstract Factory (GetTodayValues en TR_server)
+
  Singleton (Every function of TR_server is basically a singleton since we're )
+ 
  Decorator (We add extra functions to the GetTodayValues with each "GetToday" function)
 
 Unit tests in TR_server.py
