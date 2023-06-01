@@ -1,6 +1,7 @@
 import TR_server,os
 
 username = input("Introduzca su nombre de usuario: ")
+TR_server.logIn(username)
 
 def printTweet(tweet,nTweet):
     tweetstr = "("+ str(nTweet) +") "+tweet["user"]
@@ -15,7 +16,6 @@ def printComments(comments):
         print(commentstr)
 
 def dashboard(user):
-    TR_server.logIn(user)
     os.system("clear")
     print("Inicio")
     print("Bienvenido ", user,"\n")
@@ -38,7 +38,7 @@ def openThread(tweetID):
     tweet = TR_server.GetTweet(tweetID)
     comments = TR_server.GetComments(tweetID)
     print("Abriendo thread")
-    printTweet(tweet)
+    printTweet(tweet,1)
     printComments(comments)
     input("Inserte -r para regresar al inicio\n")
 
