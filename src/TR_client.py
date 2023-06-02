@@ -1,7 +1,7 @@
 import TR_server,os
 
 username = input("Introduzca su nombre de usuario: ")
-TR_server.logIn(username)
+server = TR_server.server_connection(username)
 
 def printTweet(tweet,nTweet):
     tweetstr = "("+ str(nTweet) +") "+tweet["user"]
@@ -19,7 +19,7 @@ def dashboard(user):
     os.system("clear")
     print("Inicio")
     print("Bienvenido ", user,"\n")
-    tweets = TR_server.GetLatestTweets(10)
+    tweets = server.GetLatestTweets(10)
     for nTweet in range(len(tweets)):
         printTweet(tweets[nTweet],nTweet+1)
     return tweets
@@ -28,15 +28,15 @@ def replyTweet(tweetID,user):
     while(True):
         comment = input("Introduzca su respuesta: ")
         if len(comment) < 301:
-            TR_server.PostComment(tweetID,user,comment)
+            server.PostComment(tweetID,user,comment)
             break
         else:
             print("Comentario mayor a 300 caracteres")
 
 def openThread(tweetID):
     os.system("clear")
-    tweet = TR_server.GetTweet(tweetID)
-    comments = TR_server.GetComments(tweetID)
+    tweet = server.GetTweet(tweetID)
+    comments = server.GetComments(tweetID)
     print("Abriendo thread")
     printTweet(tweet,1)
     printComments(comments)
@@ -57,7 +57,7 @@ while(True):
             print("Esto no es un thread\n")
     elif "-n" in command:
         if len(command) < 302:
-            TR_server.PostTweet(username,command[2:])
+            server.PostTweet(username,command[2:])
         else:
             print("Tweet de más de 300 caracteres")
         continue

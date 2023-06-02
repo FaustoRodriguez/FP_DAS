@@ -1,6 +1,7 @@
 # FP_DAS
 Proyecto final para la materia de diseño y arquitectura de software
 
+Proyecto estructurado basado en domain driven design
 
  5 SOLID practices:
 S - Single-responsiblity Principle
@@ -25,4 +26,4 @@ Instead of using one function to look for both tweets and comments we invert the
  
  Decorator (We add extra functions to the GetTodayValues with each "GetToday" function)
 
-Unit tests in TR_server.py
+Unit tests en la carpeta [tests](/tests)
