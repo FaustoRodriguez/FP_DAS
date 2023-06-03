@@ -3,8 +3,7 @@ from bson.objectid import ObjectId
 from datetime import datetime
 from collections import Counter
 
-class mrv():
-    
+class calc():
     def mostRepeatedValue(arr):
         if len(arr) == 0:
             return "there's no one active yet today"
@@ -95,10 +94,10 @@ class dash_server_connection(server_connection):
         return len(users)
 
     def GetTodayMostCommentedTweet(self):
-        return mrv.mostRepeatedValue(self.__GetTodayValues(self._comments,{},"tweetID"))
+        return calc.mostRepeatedValue(self.__GetTodayValues(self._comments,{},"tweetID"))
 
     def GetTodayMostActiveUser(self):
-        return mrv.mostRepeatedValue(self.__GetTodayValues(self._events,{},"user"))
+        return calc.mostRepeatedValue(self.__GetTodayValues(self._events,{},"user"))
 
     def __GetTodayValues(self,collection,query,key):
         today = datetime.utcnow().day

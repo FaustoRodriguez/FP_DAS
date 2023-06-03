@@ -1,7 +1,7 @@
 # FP_DAS
 Proyecto final para la materia de diseño y arquitectura de software
 
-Proyecto estructurado basado en domain driven design
+Proyecto estructurado basado en domain driven design con 3 dominios
 
  5 SOLID practices:
 S - Single-responsiblity Principle
@@ -16,18 +16,17 @@ Implementamos esto en la clase screenPrinter donde establecemos la misma funció
 
 
 I - Interface Segregation Principle
-
+Lo podemos ver tanto en las clases de server como en las clases de printers, solo tenemos metodos y atributos que vamos a usar, y los que no, no son compartidos ni son forzados a tener un metodo que no usan
 
 D - Dependency Inversion Principle
-Instead of using one function to look for both tweets and comments we invert the dependency and make one independent function for retrieving the comments based on a tweet ID
+
  
  3 design patterns:
- Abstract Factory (GetTodayValues en TR_server)
 
  Singleton:
 
- En TR_client la clase screenPrinter usa el patron singleton para solo utilizar una instancia de esa clase
+ En clase screenPrinter se usa el patron singleton para solo utilizar una instancia de esa clase
 
- Decorator (We add extra functions to the GetTodayValues with each "GetToday" function)
+ 
 
 Unit tests en la carpeta [tests](/tests)
