@@ -1,7 +1,7 @@
 # FP_DAS
 Proyecto final para la materia de diseño y arquitectura de software
 
-Proyecto estructurado basado en domain driven design con 3 dominios
+Proyecto estructurado basado en domain driven design
 
  5 SOLID practices:
 S - Single-responsiblity Principle
@@ -19,7 +19,14 @@ I - Interface Segregation Principle
 Lo podemos ver tanto en las clases de server como en las clases de printers, solo tenemos metodos y atributos que vamos a usar, y los que no, no son compartidos ni son forzados a tener un metodo que no usan
 
 D - Dependency Inversion Principle
+Usamos la clase screenPrinter para representar este principio
 
+Diagrama de clases: 
+
+![class diagram](/CD.png)
+
+Diagrama de secuencia:
+![Sequence diagram](/DS.png)
  
  3 design patterns:
 
