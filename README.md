@@ -4,6 +4,7 @@ Proyecto final para la materia de diseño y arquitectura de software
 Proyecto estructurado basado en domain driven design
 
  5 SOLID practices:
+ 
 S - Single-responsiblity Principle
 Podemos ver este principio en la clase server_connection en TR_server, donde la clase padre solo hace la conección al servidor de la base de datos y define las funciones más basicas: getData, postData y updateData, todo lo demás responsabilidad del servidor es expandido con las clases necesarias para ello: server_connection_client para el cliente y server_connection_dash para dashboard de eventos, de esta forma no sobrecargamos a una sola clase los metodos para la aplicacion del cliente y los que son para el dashboard de eventos
 
