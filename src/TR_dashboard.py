@@ -1,24 +1,24 @@
-import TR_server
-import os
+from TR_server import dash_server_connection
+from ScreenPrinter import dashboardPrinter
 
-server = TR_server.dash_server_connection()
-
+server = dash_server_connection()
+sp = dashboardPrinter.getInstance()
 while(True):
-    selection = int(input("Select options:\n See events dashboard (1)\n See usage reports (2)\n"))
+    selection = sp.printScreen()
     if selection == 1:
-        print("Action\t\t\t\tUser\t\t\tTimestamp")
-        for event in server.getEvents():
-            print(event["actionType"],"\t\t\t",event["user"],"\t\t",server.getTimeStamp(str(event["_id"])))
-    elif selection == 2:
-        print("The user who registered the most actions is ", server.GetTodayMostActiveUser())
+        sp.printEvents(server.GetEvents())
+    else:
+        lines = []
+        lines.append("The user who registered the most actions is " + server.GetTodayMostActiveUser())
         mostRepliedTweet = server.GetTweet(server.GetTodayMostCommentedTweet())
         if type(mostRepliedTweet) == type(""):
-            print("There's been no replies to any tweet today")
+            lines.append("There's been no replies to any tweet today")
+            sp.printLines(lines)
         else:
-            print("The tweet with most replies is \"", mostRepliedTweet["tweet"], "\" by ", mostRepliedTweet["user"])
-        print("Today this app was used by ",server.GetTodayUsers(), " users")
-    else:
-        print("Not valid option ")
-    input("Enter to reload dashboard")
-    os.system("clear")
+            lines.append("The tweet with most replies is: ")
+            sp.printLines(lines)
+            sp.printTweet(mostRepliedTweet)
+        sp.printLine("Today this app was used by " + str(server.GetTodayUsers()) + " users")
+        
+    input("Enter to reload dashboard ")
     

@@ -1,27 +1,13 @@
-import TR_server,os
+from ScreenPrinter import twitterPrinter
+import TR_server
 
 username = input("Introduzca su nombre de usuario: ")
 server = TR_server.client_server_connection(username)
+sp = twitterPrinter.getInstance()
 
-def printTweet(tweet,nTweet):
-    tweetstr = "("+ str(nTweet) +") " + tweet["user"]
-    if tweet["type"] == "thread":
-        tweetstr = tweetstr + " (Thread)"
-    tweetstr = tweetstr + ": " + tweet["tweet"]
-    print(tweetstr)
-
-def printComments(comments):
-    for comment in comments:
-        commentstr = "\t" + comment["user"] + ": " + comment["comment"]
-        print(commentstr)
-
-def dashboard(user):
-    os.system("clear")
-    print("Inicio")
-    print("Bienvenido ", user,"\n")
+def startScreen(user):
     tweets = server.GetLatestTweets(10)
-    for nTweet in range(len(tweets)):
-        printTweet(tweets[nTweet],nTweet+1)
+    sp.printScreen(tweets,user)
     return tweets
 
 def replyTweet(tweetID,user):
@@ -34,16 +20,16 @@ def replyTweet(tweetID,user):
             print("Comentario mayor a 300 caracteres")
 
 def openThread(tweetID):
-    os.system("clear")
+    sp.clearScreen
     tweet = server.GetTweet(tweetID)
     comments = server.GetComments(tweetID)
     print("Abriendo thread")
-    printTweet(tweet,1)
-    printComments(comments)
+    sp.printTweet(tweet,1)
+    sp.printComments(comments)
     input("Inserte -r para regresar al inicio\n")
 
 while(True):
-    tweets = dashboard(username)
+    tweets = startScreen(username)
     command = input("\nSeleccione una opcion:\n Responder tweet: -r numTweet\n Abrir Thread: -t numThread\n Escribir nuevo tweet: -n textoTweet \n Cargar nuevos tweets: -c\n")
     if "-r" in command:
         if int(command[2:]) > 0 and int(command[2:]) <= len(tweets):
@@ -55,6 +41,7 @@ while(True):
             continue
         else:
             print("Esto no es un thread\n")
+            continue
     elif "-n" in command:
         if len(command) < 302:
             server.PostTweet(username,command[2:])

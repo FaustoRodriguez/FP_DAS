@@ -3,6 +3,20 @@ from bson.objectid import ObjectId
 from datetime import datetime
 from collections import Counter
 
+class mrv():
+    
+    def mostRepeatedValue(arr):
+        if len(arr) == 0:
+            return "there's no one active yet today"
+        dict = Counter(arr)
+        v = list(dict.values())
+        k = list(dict.keys())
+        return k[v.index(max(v))]
+
+class objId():
+    def getTimeStamp(id):
+        return ObjectId(id).generation_time 
+
 class server_connection():
     
     _events = "events"
@@ -11,25 +25,20 @@ class server_connection():
     
     def __init__(self):        
         server = pymongo.MongoClient("mongodb://localhost:27017/")
-        self._db = server["tweetdatabase"]
+        self.__db = server["tweetdatabase"]
     
     def _postData(self,col,data):
-        self._db[col].insert_one(data)
+        self.__db[col].insert_one(data)
         
     def _getData(self,col,query={}):
-        return self._db[col].find(query)
-        
-    def getTimeStamp(self,id):
-        return ObjectId(id).generation_time
+        return self.__db[col].find(query)
     
-    def _mostRepeatedValue(arr):
-        if len(arr) == 0:
-            return "there's no one active yet today"
-        dict = Counter(arr)
-        v = list(dict.values())
-        k = list(dict.keys())
-        return k[v.index(max(v))]
-        
+    def _updateData(self,col,query,newdata,update="one"):
+        if update == "one":
+            self.__db[col].update_one(query,newdata)
+        elif update == "many":
+            self.__db[col].update_many(query,newdata)
+
 class client_server_connection(server_connection):
     def __init__(self,username):
         super().__init__()
@@ -42,11 +51,7 @@ class client_server_connection(server_connection):
         return self._getData(self._comments,{"tweetID":tweetID})
     
     def GetTweet(self,tweetID):
-        try:
-            obj = ObjectId(tweetID)
-        except:
-            return "Tweet not Found"
-        for tweet in self._getData(self._tweets,{"_id":obj}):
+        for tweet in self._getData(self._tweets,{"_id":ObjectId(tweetID)}):
             return tweet
 
     def GetLatestTweets(self,nTweets):
@@ -66,7 +71,7 @@ class client_server_connection(server_connection):
         return self.GetTweet(tweetID)["type"] == "thread"
     
     def __makeThread(self,tweetID):
-        self._db[self._tweets].update_one({"_id":ObjectId(tweetID)},{"$set":{"type":"thread"}})
+        self._updateData(self._tweets,{"_id":ObjectId(tweetID)},{"$set":{"type":"thread"}},"one")
         
     def PostComment(self,tweetID,user,comment):
         self._postData(self._comments,{"tweetID":tweetID,"user":user,"comment":comment})
@@ -82,7 +87,7 @@ class dash_server_connection(server_connection):
     def __init__(self):
         super().__init__()
     
-    def getEvents(self):
+    def GetEvents(self):
         return self._getData(self._events)
     
     def GetTodayUsers(self):
@@ -90,15 +95,22 @@ class dash_server_connection(server_connection):
         return len(users)
 
     def GetTodayMostCommentedTweet(self):
-        return server_connection._mostRepeatedValue(self.__GetTodayValues(self._comments,{},"tweetID"))
+        return mrv.mostRepeatedValue(self.__GetTodayValues(self._comments,{},"tweetID"))
 
     def GetTodayMostActiveUser(self):
-        return server_connection._mostRepeatedValue(self.__GetTodayValues(self._events,{},"user"))
+        return mrv.mostRepeatedValue(self.__GetTodayValues(self._events,{},"user"))
 
     def __GetTodayValues(self,collection,query,key):
         today = datetime.utcnow().day
         values = []
         for element in self._getData(collection,query):
-            if self.getTimeStamp(element["_id"]).day == today:
+            if objId.getTimeStamp(element["_id"]).day == today:
                 values.append(element[key])
         return values
+    def GetTweet(self,tweetID):
+        try:
+            obj = ObjectId(tweetID)
+        except:
+            return "Tweet not Found"
+        for tweet in self._getData(self._tweets,{"_id":obj}):
+            return tweet
