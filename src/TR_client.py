@@ -1,10 +1,10 @@
 import TR_server,os
 
 username = input("Introduzca su nombre de usuario: ")
-server = TR_server.server_connection(username)
+server = TR_server.client_server_connection(username)
 
 def printTweet(tweet,nTweet):
-    tweetstr = "("+ str(nTweet) +") "+tweet["user"]
+    tweetstr = "("+ str(nTweet) +") " + tweet["user"]
     if tweet["type"] == "thread":
         tweetstr = tweetstr + " (Thread)"
     tweetstr = tweetstr + ": " + tweet["tweet"]
